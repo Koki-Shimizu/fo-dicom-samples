@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D9AF008C-EE25-49B3-96F6-E81B8A59D017}</ProjectGuid>
+    <ProjectGuid>{95867514-F3A5-401A-B8FB-EA87AE65963D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dicom.CStoreSCP</RootNamespace>
-    <AssemblyName>Dicom.CStoreSCP</AssemblyName>
+    <RootNamespace>Dicom.CFindSCP</RootNamespace>
+    <AssemblyName>Dicom.CFindSCP</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -57,7 +57,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CStoreSCP.cs" />
+    <Compile Include="CFindSCP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

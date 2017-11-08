@@ -11,60 +11,6 @@ namespace Dicom.CFindSCP
 {
     public class CFindSCP : DicomService, IDicomServiceProvider, IDicomCFindProvider, IDicomCEchoProvider
     {
-        private static string StoragePath = @".\DICOM";
-
-        private static DicomTransferSyntax[] AcceptedTransferSyntaxes = new DicomTransferSyntax[]
-                                                                            {
-                                                                                    DicomTransferSyntax
-                                                                                        .ExplicitVRLittleEndian,
-                                                                                    DicomTransferSyntax
-                                                                                        .ExplicitVRBigEndian,
-                                                                                    DicomTransferSyntax
-                                                                                        .ImplicitVRLittleEndian
-                                                                            };
-
-        private static DicomTransferSyntax[] AcceptedImageTransferSyntaxes = new DicomTransferSyntax[]
-                                                                                 {
-                                                                                         // Lossless
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEGLSLossless,
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEG2000Lossless,
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEGProcess14SV1,
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEGProcess14,
-                                                                                         DicomTransferSyntax
-                                                                                             .RLELossless,
-
-                                                                                         // Lossy
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEGLSNearLossless,
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEG2000Lossy,
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEGProcess1,
-                                                                                         DicomTransferSyntax
-                                                                                             .JPEGProcess2_4,
-
-                                                                                         // Uncompressed
-                                                                                         DicomTransferSyntax
-                                                                                             .ExplicitVRLittleEndian,
-                                                                                         DicomTransferSyntax
-                                                                                             .ExplicitVRBigEndian,
-                                                                                         DicomTransferSyntax
-                                                                                             .ImplicitVRLittleEndian
-                                                                                 };
-
-        public static void Initalize( string storagePath )
-        {
-            if( string.IsNullOrEmpty(storagePath) )
-            {
-                throw new ArgumentNullException("storagePath");
-            }
-
-            StoragePath = storagePath;
-        }
         
         public CFindSCP(INetworkStream stream, Encoding fallbackEncoding, Logger log)
             : base(stream, fallbackEncoding, log)
@@ -81,13 +27,7 @@ namespace Dicom.CFindSCP
                     DicomRejectReason.CalledAENotRecognized);
                 return;
             }
-
-            foreach (var pc in association.PresentationContexts)
-            {
-                if (pc.AbstractSyntax == DicomUID.Verification) pc.AcceptTransferSyntaxes(AcceptedTransferSyntaxes);
-                else if (pc.AbstractSyntax.StorageCategory != DicomStorageCategory.None) pc.AcceptTransferSyntaxes(AcceptedImageTransferSyntaxes);
-            }
-
+            
             SendAssociationAccept(association);
         }
 
@@ -133,7 +73,7 @@ namespace Dicom.CFindSCP
             return MakeDummyWorklist();
         }
 
-        private static List<DicomDataset> MakeDummyWorklist()
+        private List<DicomDataset> MakeDummyWorklist()
         {
             var ds = new DicomDataset();
             ds.Add(DicomTag.SpecificCharacterSet, "ISO_IR 100");
@@ -208,22 +148,11 @@ namespace Dicom.CFindSCP
 
         private string GetTargetDate(DicomCFindRequest request)
         {
-            // TODO: Get patientId from dataset.
-
-            if (request.Dataset.Contains(PatientNumberTag))
-            {
-                DicomLongString dicomLongStringItem = request.Dataset.Get<DicomLongString>(PatientNumberTag);
-
-            }
+            // TODO: Get target date from dataset.
 
             return "dummy";
         }
-
-        public void OnCStoreRequestException(string tempFileName, Exception e)
-        {
-            // let library handle logging and error response
-        }
-
+        
         public DicomCEchoResponse OnCEchoRequest(DicomCEchoRequest request)
         {
             return new DicomCEchoResponse(request, DicomStatus.Success);

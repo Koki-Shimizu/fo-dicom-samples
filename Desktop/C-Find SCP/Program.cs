@@ -8,7 +8,7 @@ using System.Text;
 using Dicom.Log;
 using Dicom.Network;
 
-namespace Dicom.CStoreSCP
+namespace Dicom.CFindSCP
 {
     internal class Program
     {
@@ -21,13 +21,11 @@ namespace Dicom.CStoreSCP
 
             // start DICOM server on port from command line argument or 11112
             int tmp;
-            var port = args != null && args.Length > 0 && int.TryParse(args[0], out tmp) ? tmp : 11112;
+            var port = args != null && args.Length > 0 && int.TryParse(args[0], out tmp) ? tmp : 11113;
             Console.WriteLine($"Starting C-Store SCP server on port {port}");
 
-            CStoreSCP.Initalize(@".\DICOM");
-            var server = DicomServer.Create<CStoreSCP>(port);
+            var server = DicomServer.Create<CFindSCP>(port);
             
-
             // end process
             Console.WriteLine("Press <return> to end...");
             Console.ReadLine();
