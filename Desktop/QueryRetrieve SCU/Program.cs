@@ -16,9 +16,9 @@ namespace QueryRetrieve_SCU
 
         private static string StoragePath = @".\DICOM";
         // values of the Query Retrieve Server to test with.
-        private static string QRServerHost = "www.dicomserver.co.uk";
-        private static int QRServerPort = 104;
-        private static string QRServerAET = "STORESCP";
+        private static string QRServerHost = "127.0.0.1";
+        private static int QRServerPort = 11113;
+        private static string QRServerAET = "FINDSCP";
         private static string AET = "FODICOMSCU";
 
 

@@ -19,7 +19,7 @@ namespace Dicom.CFindSCP
 
         public void OnReceiveAssociationRequest(DicomAssociation association)
         {
-            if (association.CalledAE != "STORESCP")
+            if (association.CalledAE != "FINDSCP")
             {
                 SendAssociationReject(
                     DicomRejectResult.Permanent,
