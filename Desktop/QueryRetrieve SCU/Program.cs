@@ -30,7 +30,7 @@ namespace QueryRetrieve_SCU
 
             // Find a list of Studies
 
-            var request = CreateStudyRequestByPatientName("Tester^P*");
+            var request = CreateDummyRequest();
 
             var studyUids = new List<string>();
             request.OnResponseReceived += (req, response) =>
@@ -105,6 +105,10 @@ namespace QueryRetrieve_SCU
             Console.ReadLine();
         }
 
+        private static DicomCFindRequest CreateDummyRequest()
+        {
+            return DicomCFindRequest.CreateWorklistQuery("aaaaa");
+        }
 
         public static DicomCFindRequest CreateStudyRequestByPatientName(string patientName)
         {
@@ -114,7 +118,7 @@ namespace QueryRetrieve_SCU
             // but consider to create your own request that contains exactly those DicomTags that
             // you realy need pro process your data and not to cause unneccessary traffic and IO load:
 
-            var request = new DicomCFindRequest(DicomQueryRetrieveLevel.Study);
+            var request = new DicomCFindRequest(DicomQueryRetrieveLevel.Worklist);
 
             // always add the encoding
             request.Dataset.AddOrUpdate(new DicomTag(0x8, 0x5), "ISO_IR 100");
@@ -153,6 +157,8 @@ namespace QueryRetrieve_SCU
 
             // add the dicom tags that contain the filter criterias
             request.Dataset.AddOrUpdate(DicomTag.StudyInstanceUID, studyInstanceUID);
+
+            
 
             return request;
         }

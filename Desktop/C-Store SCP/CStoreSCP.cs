@@ -84,8 +84,14 @@ namespace Dicom.CStoreSCP
 
             foreach (var pc in association.PresentationContexts)
             {
-                if (pc.AbstractSyntax == DicomUID.Verification) pc.AcceptTransferSyntaxes(AcceptedTransferSyntaxes);
-                else if (pc.AbstractSyntax.StorageCategory != DicomStorageCategory.None) pc.AcceptTransferSyntaxes(AcceptedImageTransferSyntaxes);
+                if (pc.AbstractSyntax == DicomUID.Verification)
+                {
+                    pc.AcceptTransferSyntaxes(AcceptedTransferSyntaxes);
+                }
+                else if (pc.AbstractSyntax.StorageCategory != DicomStorageCategory.None)
+                {
+                    pc.AcceptTransferSyntaxes(AcceptedImageTransferSyntaxes);
+                }
             }
 
             SendAssociationAccept(association);

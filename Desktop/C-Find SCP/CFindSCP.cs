@@ -11,7 +11,16 @@ namespace Dicom.CFindSCP
 {
     public class CFindSCP : DicomService, IDicomServiceProvider, IDicomCFindProvider, IDicomCEchoProvider
     {
-        
+        private static DicomTransferSyntax[] AcceptedTransferSyntaxes = new DicomTransferSyntax[]
+                                                                            {
+                                                                                    DicomTransferSyntax.Lookup(DicomUID.StudyRootQueryRetrieveInformationModelFIND),
+                                                                                    DicomTransferSyntax.Lookup(DicomUID.ModalityWorklistInformationModelFIND),
+                                                                                    DicomTransferSyntax.Lookup(DicomUID.PatientRootQueryRetrieveInformationModelFIND)
+
+
+                                                                            };
+
+       
         public CFindSCP(INetworkStream stream, Encoding fallbackEncoding, Logger log)
             : base(stream, fallbackEncoding, log)
         {
@@ -27,7 +36,25 @@ namespace Dicom.CFindSCP
                     DicomRejectReason.CalledAENotRecognized);
                 return;
             }
-            
+
+            foreach (var pc in association.PresentationContexts)
+            {
+                if (pc.AbstractSyntax == DicomUID.Verification)
+                {
+                    pc.AcceptTransferSyntaxes(AcceptedTransferSyntaxes);
+                }
+                else
+                {
+                    if (pc.AbstractSyntax == DicomUID.StudyRootQueryRetrieveInformationModelFIND ||                        
+                        pc.AbstractSyntax == DicomUID.PatientRootQueryRetrieveInformationModelFIND ||
+                        pc.AbstractSyntax == DicomUID.ModalityWorklistInformationModelFIND
+                        )
+                    {
+                        pc.SetResult(DicomPresentationContextResult.Accept);
+                    }                    
+                }
+            }
+
             SendAssociationAccept(association);
         }
 
